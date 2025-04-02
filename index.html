@@ -1,45 +1,87 @@
-<script>
-  document.getElementById('indicacaoForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      let nomeIndicador = document.getElementById('seuNome').value;
-      let whatsappIndicador = document.getElementById('whatsappIndicador').value;
-      let nomeIndicado = document.getElementById('nomeAmigo').value;
-      let whatsappIndicado = document.getElementById('whatsappAmigo').value;
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indique um Amigo e Ganhe!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
 
-      let url = "https://script.google.com/macros/s/AKfycbz6_tlQuE_LtqkuNRlP3tm3bZI0PV6ABcg2opB0Gx_y4Euc1_r2Wz_HYuOajBxb1TGsgw/exec"; // Substitua pela URL gerada no Apps Script
+    <h2>💰 Indique um Amigo e Ganhe Descontos!</h2>
+    <p>Preencha os dados abaixo para indicar um amigo e ganhar benefícios exclusivos.</p>
 
-      // Mensagem personalizada para o WhatsApp do indicado
-      let mensagem = `Oi, ${nomeIndicado}! 😊  
+    <form id="indicacaoForm">
+        <input type="text" id="seuNome" placeholder="Seu Nome" required>
+        <input type="tel" id="whatsappIndicador" placeholder="Seu WhatsApp (com DDD)" required>
+        <input type="text" id="nomeAmigo" placeholder="Nome do Amigo" required>
+        <input type="tel" id="whatsappAmigo" placeholder="WhatsApp do Amigo (com DDD)" required>
+        <button type="submit">Enviar Indicação</button>
+    </form>
 
-O ${nomeIndicador} te indicou para ganhar um DESCONTO EXCLUSIVO na nossa loja! 🎉💰  
+    <script>
+        document.getElementById('indicacaoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            let nomeIndicador = document.getElementById('seuNome').value;
+            let whatsappIndicador = document.getElementById('whatsappIndicador').value;
+            let nomeIndicado = document.getElementById('nomeAmigo').value;
+            let whatsappIndicado = document.getElementById('whatsappAmigo').value;
 
-Quer garantir essa oferta especial? É super simples: basta chamar a gente aqui no WhatsApp e dizer que foi indicado pelo ${nomeIndicador}!  
+            let url = "https://script.google.com/macros/s/AKfycbz6_tlQuE_LtqkuNRlP3tm3bZI0PV6ABcg2opB0Gx_y4Euc1_r2Wz_HYuOajBxb1TGsgw/exec"; // Substitua pela URL gerada no Apps Script
 
-🔗 Acesse agora e aproveite: https://wa.me/SEUNUMERO?text=Olá,+fui+indicado+por+${encodeURIComponent(nomeIndicador)}+e+quero+meu+desconto!  
+            let mensagem = `Oi, ${nomeIndicado}! 😊  \n\nO ${nomeIndicador} te indicou para ganhar um DESCONTO EXCLUSIVO na nossa loja! 🎉💰  \n\nQuer garantir essa oferta especial? É super simples: basta chamar a gente aqui no WhatsApp e dizer que foi indicado pelo ${nomeIndicador}!  \n\n🔗 Acesse agora e aproveite: https://wa.me/SEUNUMERO?text=Olá,+fui+indicado+por+${encodeURIComponent(nomeIndicador)}+e+quero+meu+desconto!  \n\nEstamos te esperando! Qualquer dúvida, estamos à disposição. 😉`;
 
-Estamos te esperando! Qualquer dúvida, estamos à disposição. 😉` 
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nomeIndicador: nomeIndicador,
+                    whatsappIndicador: whatsappIndicador,
+                    nomeIndicado: nomeIndicado,
+                    whatsappIndicado: whatsappIndicado
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert("Indicação enviada com sucesso!");
+                document.getElementById('indicacaoForm').reset();
+                window.open(`https://wa.me/${whatsappIndicado}?text=${encodeURIComponent(mensagem)}`, '_blank');
+            })
+            .catch(error => console.error("Erro:", error));
+        });
+    </script>
 
-      // Enviar os dados para a planilha
-      fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-              nomeIndicador: nomeIndicador,
-              whatsappIndicador: whatsappIndicador,
-              nomeIndicado: nomeIndicado,
-              whatsappIndicado: whatsappIndicado
-          })
-      })
-      .then(response => response.text())
-      .then(data => {
-          alert("Indicação enviada com sucesso!");
-          document.getElementById('indicacaoForm').reset();
-
-          // Abrir WhatsApp do indicado com a mensagem pronta
-          window.open(`https://wa.me/${whatsappIndicado}?text=${encodeURIComponent(mensagem)}`, '_blank');
-      })
-      .catch(error => console.error("Erro:", error));
-  });
-</script>
-
+</body>
+</html>
