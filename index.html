@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indique e Ganhe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: url('https://www.wtimeacessorios.com.br/logo.png') no-repeat center center fixed;
+            background-size: contain;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        h1 { color: #333; }
+        p { color: #555; }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #28a745; color: white; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Indique e Ganhe!</h1>
+        <p>Indique um amigo e ganhe um desconto especial na próxima compra! Seu amigo também ganha um benefício exclusivo.</p>
+        
+        <form id="indicacaoForm">
+            <input type="text" id="seuNome" placeholder="Seu Nome e Sobrenome" required>
+            <input type="text" id="nomeAmigo" placeholder="Nome e Sobrenome do Amigo" required>
+            <input type="tel" id="whatsappAmigo" placeholder="(DDD) Número do WhatsApp" required>
+            <button type="submit">Enviar Indicação</button>
+        </form>
+        
+        <p id="mensagemSucesso" style="display: none; color: green; font-weight: bold;">Indicação enviada com sucesso!</p>
+    </div>
+    
+    <script>
+        document.getElementById('indicacaoForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let nome = document.getElementById('seuNome').value;
+            let amigo = document.getElementById('nomeAmigo').value;
+            let whatsapp = document.getElementById('whatsappAmigo').value;
+            
+            let numeroFormatado = whatsapp.replace(/\D/g, '');
+            let mensagem = `Olá! ${nome} te indicou para ganhar um desconto especial! Acesse nosso WhatsApp: https://wa.me/5511949572186?text=Indicado+por+${nome}`;
+            
+            window.open(`https://wa.me/55${numeroFormatado}?text=${encodeURIComponent(mensagem)}`, '_blank');
+            
+            document.getElementById('mensagemSucesso').style.display = 'block';
+            document.getElementById('indicacaoForm').reset();
+        });
+    </script>
+</body>
+</html>
